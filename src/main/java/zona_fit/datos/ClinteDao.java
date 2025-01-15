@@ -136,6 +136,28 @@ public class ClinteDao implements IClienteDao{
 
     @Override
     public boolean eliminarCliente(Cliente cliente) {
+        PreparedStatement ps;
+        Connection con = getConexion();
+        var sql = "DELETE FROM cliente WHERE id=?";
+
+        try {
+
+            ps = con.prepareStatement(sql);
+            ps.setInt(1,cliente.getId());
+            ps.execute();
+            return true;
+
+        }catch (Exception e){
+            System.out.println("Error al eliminar cliente: "+e.getMessage());
+        }
+        finally {
+            try {
+                con.close();
+            }catch (Exception e){
+                System.out.println("Erro al cerrar la conexión: " + e.getMessage());
+            }
+        }
+
         return false;
     }
 
@@ -161,13 +183,21 @@ public class ClinteDao implements IClienteDao{
         //else System.out.println("No se agrego el cliente: "+nuevoCliente);
 
         //Modificar Cliente
-        var modificarCliente = new Cliente(1,"Valen","Warren",50);
-        var modicado = clienteDao.modificarCliente(modificarCliente);
+        //var modificarCliente = new Cliente(1,"Valen","Warren",50);
+        //var modicado = clienteDao.modificarCliente(modificarCliente);
 
-        if (modicado)
-            System.out.println("Cliente modificado: "+modificarCliente);
-        else
-            System.out.println("No se puudo modificar cliente: "+modificarCliente);
+        //if (modicado)
+        //  System.out.println("Cliente modificado: "+modificarCliente);
+        //else
+        //  System.out.println("No se puudo modificar cliente: "+modificarCliente);
+
+        //Eliminar Cliente
+        var eliminarCliente = new Cliente(55);
+        var eliminado = clienteDao.eliminarCliente(eliminarCliente);
+
+        if (eliminado) System.out.println("Cliente eliminado: "+ eliminarCliente);
+        else System.out.println("Erro al eliminar cliente: "+eliminarCliente);
+
 
         //Listar clientes
         System.out.println("***Listar clientes***");
