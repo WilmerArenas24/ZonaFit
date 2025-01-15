@@ -79,6 +79,30 @@ public class ClinteDao implements IClienteDao{
 
     @Override
     public boolean agregarCliente(Cliente cliente) {
+        PreparedStatement ps;
+        Connection con = getConexion();
+        String sql = "INSERT INTO cliente(nombre, apellido, membresia)"+" "+
+                "VALUES(?,?,?)";
+
+        try {
+
+            ps = con.prepareStatement(sql);
+            ps.setString(1,cliente.getNombre());
+            ps.setString(2,cliente.getApellido());
+            ps.setInt(3, cliente.getMembresia());
+            ps.execute();
+            return true;
+            
+        }catch (Exception e){
+            System.out.println("Error al agregar cliente: "+e.getMessage());
+        }finally {
+            try {
+                con.close();
+            }catch (Exception e){
+                System.out.println("Error al cerrar conexión: "+e.getMessage());
+            }
+        }
+
         return false;
     }
 
@@ -100,11 +124,11 @@ public class ClinteDao implements IClienteDao{
         //clientes.forEach(System.out::println);
 
         //Buscar por ID
-        var cliente1 = new Cliente(2);
+        var cliente1 = new Cliente(11);
         System.out.println("Cliente antes de la busqueda "+cliente1);
         var encontrado = clienteDao.buscarClientePorId(cliente1);
         if (encontrado) System.out.println("Cliente encontrado: "+cliente1);
-        else System.out.println("No se encontro cleinte id: "+cliente1.getId());
+        else System.out.println("No se encontro cliente id: "+cliente1.getId());
 
     }
 }
