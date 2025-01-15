@@ -92,7 +92,7 @@ public class ClinteDao implements IClienteDao{
             ps.setInt(3, cliente.getMembresia());
             ps.execute();
             return true;
-            
+
         }catch (Exception e){
             System.out.println("Error al agregar cliente: "+e.getMessage());
         }finally {
@@ -117,18 +117,31 @@ public class ClinteDao implements IClienteDao{
     }
 
     public static void main(String[] args) {
+        IClienteDao clienteDao = new ClinteDao();
+
         //Listar clientes
         //System.out.println("Listar clientes");
-        IClienteDao clienteDao = new ClinteDao();
         //var clientes = clienteDao.listarClientes();
         //clientes.forEach(System.out::println);
 
         //Buscar por ID
-        var cliente1 = new Cliente(11);
-        System.out.println("Cliente antes de la busqueda "+cliente1);
-        var encontrado = clienteDao.buscarClientePorId(cliente1);
-        if (encontrado) System.out.println("Cliente encontrado: "+cliente1);
-        else System.out.println("No se encontro cliente id: "+cliente1.getId());
+        //var cliente1 = new Cliente(11);
+        //System.out.println("Cliente antes de la busqueda "+cliente1);
+        //var encontrado = clienteDao.buscarClientePorId(cliente1);
+        //if (encontrado) System.out.println("Cliente encontrado: "+cliente1);
+        //else System.out.println("No se encontro cliente id: "+cliente1.getId());
+
+        //Agregar cliente
+        var nuevoCliente = new Cliente("Daniel","Ortiz",500);
+        var agregado = clienteDao.agregarCliente(nuevoCliente);
+        if (agregado) System.out.println("Cliente agregado: "+nuevoCliente);
+        else System.out.println("No se agrego el cliente: "+nuevoCliente);
+
+        //Listar clientes
+        System.out.println("***Listar clientes***");
+        var clientes = clienteDao.listarClientes();
+        clientes.forEach(System.out::println);
+
 
     }
 }
