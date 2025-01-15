@@ -48,6 +48,32 @@ public class ClinteDao implements IClienteDao{
 
     @Override
     public boolean buscarClientePorId(Cliente cliente) {
+        PreparedStatement ps;
+        ResultSet rs;
+        var con = getConexion();
+        var  sql = "SELECT * FROM cliente WHERE id = ?";
+
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1,cliente.getId());
+            rs = ps.executeQuery();
+
+            if (rs.next()){
+                cliente.setNombre(rs.getString("nombre"));
+                cliente.setApellido(rs.getString("apellido"));
+                cliente.setMembresia(rs.getInt("membresia"));
+                return true;
+            }
+        }catch (Exception e){
+            System.out.println("Error a recuperar cliente por id: "+e.getMessage());
+        }
+        finally {
+            try {
+                con.close();
+            }catch (Exception e){
+                System.out.println("Error al cerrar conexión: "+ e.getMessage());
+            }
+        }
         return false;
     }
 
@@ -68,10 +94,17 @@ public class ClinteDao implements IClienteDao{
 
     public static void main(String[] args) {
         //Listar clientes
-        System.out.println("Listar clientes");
+        //System.out.println("Listar clientes");
         IClienteDao clienteDao = new ClinteDao();
-        var clientes = clienteDao.listarClientes();
-        clientes.forEach(System.out::println);
+        //var clientes = clienteDao.listarClientes();
+        //clientes.forEach(System.out::println);
+
+        //Buscar por ID
+        var cliente1 = new Cliente(2);
+        System.out.println("Cliente antes de la busqueda "+cliente1);
+        var encontrado = clienteDao.buscarClientePorId(cliente1);
+        if (encontrado) System.out.println("Cliente encontrado: "+cliente1);
+        else System.out.println("No se encontro cleinte id: "+cliente1.getId());
 
     }
 }
