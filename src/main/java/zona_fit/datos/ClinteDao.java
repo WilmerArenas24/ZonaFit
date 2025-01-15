@@ -65,4 +65,13 @@ public class ClinteDao implements IClienteDao{
     public boolean eliminarCliente(Cliente cliente) {
         return false;
     }
+
+    public static void main(String[] args) {
+        //Listar clientes
+        System.out.println("Listar clientes");
+        IClienteDao clienteDao = new ClinteDao();
+        var clientes = clienteDao.listarClientes();
+        clientes.forEach(System.out::println);
+
+    }
 }
